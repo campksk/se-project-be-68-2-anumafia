@@ -4,7 +4,7 @@ const Company = require('../models/Company');
 // @desc    Add review for company
 // @route   POST /api/v1/reviews
 // @access  Private
-exports.addReview = async (req, res, next) => {
+exports.createReview = async (req, res, next) => {
     try {
         const company = await Company.findById(req.body.company);
         
