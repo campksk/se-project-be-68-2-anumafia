@@ -12,5 +12,5 @@ router.put('/updatepassword', protect,updatePassword);
 router.put('/ban/:id',protect,authorize('admin'),banUser);
 router.put('/unban/:id', protect,authorize('admin'),unbanUser);
 router.put('/yellowcard/:id',protect,authorize('admin'),giveYellowCard);
-router.put('me',protect,updateMe);
+router.put('/me',protect,updateMe);
 module.exports = router;
