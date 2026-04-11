@@ -245,7 +245,7 @@ exports.banUser = async (req, res, next) => {
       msg: `User ${user.name} has been banned`,
       data: {
         bannedUntil: bannedUntil ?? "permanent",
-        reason: user.ban.reason,
+        reason: reason,
       },
     });
   } catch (err) {
