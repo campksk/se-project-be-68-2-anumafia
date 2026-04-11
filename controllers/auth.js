@@ -232,13 +232,13 @@ exports.banUser = async (req, res, next) => {
       bannedUntil = new Date(Date.now() + duration * ms[unit]);
     }
 
-     await User.findByIdAndUpdate(req.params.id, {
-            ban: {
-                isBanned: true,
-                bannedUntil,
-                reason: reason || null
-            }
-        });
+    await User.findByIdAndUpdate(req.params.id, {
+      ban: {
+        isBanned: true,
+        bannedUntil,
+        reason: reason || null,
+      },
+    });
 
     res.status(200).json({
       success: true,
@@ -275,9 +275,9 @@ exports.unbanUser = async (req, res, next) => {
       });
     }
 
-    await User.findByIdAndUpdate(req.user.id, {
-    ban: { isBanned: false, bannedUntil: null, reason: null }
-});
+    await User.findByIdAndUpdate(req.params.id, {
+      ban: { isBanned: false, bannedUntil: null, reason: null },
+    });
 
     res.status(200).json({
       success: true,
