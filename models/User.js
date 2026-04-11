@@ -33,7 +33,22 @@ const UserSchema = new mongoose.Schema({
     createAt: {
         type: Date,
         default: Date.now
+    },
+    
+    ban: {
+        isBanned: {
+            type: Boolean,
+            default: false
+        },
+        bannedUntil: {
+            type: Date,
+            default: null
+        },
+        reason: {
+            type: String,
+            default: null
     }
+},
 });
 
 //Encrypt password using bcrypt
