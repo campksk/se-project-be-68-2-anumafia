@@ -171,36 +171,3 @@ exports.updatePassword = async(req, res, next) => {
     }
 }
 
-exports.updateMe = async (req, res, next) => {
-    try {
-        const allowedFields = {};
-        if (req.body.name  !== undefined) allowedFields.name  = req.body.name;
-        if (req.body.tel   !== undefined) allowedFields.tel   = req.body.tel;
-        if (req.body.email !== undefined) allowedFields.email = req.body.email;
-
-        if (Object.keys(allowedFields).length === 0) {
-            return res.status(400).json({
-                success: false,
-                msg: 'Please provide at least one field to update (name, tel, email)'
-            });
-        }
-
-        const user = await User.findByIdAndUpdate(
-            req.user.id,
-            allowedFields,
-            { new: true, runValidators: true }
-        );
-
-        res.status(200).json({
-            success: true,
-            data: user
-        });
-    }
-    catch (err) {
-        if (err.name === 'ValidationError') {
-            const message = Object.values(err.errors).map(val => val.message).join(', ');
-            return res.status(400).json({ success: false, msg: message });
-        }
-        res.status(500).json({ success: false, msg: 'Server error' });
-    }
-};
