@@ -1,5 +1,6 @@
 const Review = require('../models/Review');
 const Company = require('../models/Company');
+const Interview = require('../models/Interview'); // อย่าลืม import Interview
 
 // @desc    Add review for company
 // @route   POST /api/v1/reviews
@@ -13,6 +14,30 @@ exports.createReview = async (req, res, next) => {
                 success: false,
                 message:`No company with the id of ${req.body.company}`
             })
+        }
+
+        const hasInterviewed = await Interview.findOne({
+            user: req.user.id,
+            company: req.body.company
+        });
+
+        if (!hasInterviewed && req.user.role !== 'admin') {
+            return res.status(403).json({
+                success: false,
+                message: `User has never interviewed with this company. Cannot add a review.`
+            });
+        }
+
+        const alreadyReviewed = await Review.findOne({
+            user: req.user.id,
+            company: req.body.company
+        });
+
+        if (alreadyReviewed) {
+            return res.status(400).json({
+                success: false,
+                message: `User has already reviewed this company.`
+            });
         }
 
         // add user Id to req.body
