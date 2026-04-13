@@ -1,5 +1,5 @@
 const express = require('express');
-const { register, login, getMe, logout, updatePassword,banUser,unbanUser } = require('../controllers/auth');
+const { register, login, getMe, logout, updatePassword,banUser,unbanUser,giveYellowCard } = require('../controllers/auth');
 const { protect,authorize }= require('../middleware/auth');
 
 const router = express.Router();
@@ -11,5 +11,6 @@ router.get('/logout',logout);
 router.put('/updatepassword', protect,updatePassword);
 router.put('/ban/:id',protect,authorize('admin'),banUser);
 router.put('/unban/:id', protect,authorize('admin'),unbanUser);
+router.put('/yellowcard/:id',protect,authorize('admin'),giveYellowCard);
 
 module.exports = router;
