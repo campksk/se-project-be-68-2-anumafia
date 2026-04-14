@@ -58,6 +58,7 @@ const companies = require('./routes/companies');
 const interviews = require('./routes/interviews');
 const users = require('./routes/users');
 const reviews = require('./routes/reviews');
+const user = require('./routes/users');
 
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/companies', companies);
