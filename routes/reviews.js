@@ -11,4 +11,7 @@ router.route("/:id")
 router.route('/:id')
     .delete(protect, authorize('admin', 'user'), deleteReview);
 
+router.route('/:id')
+    .delete(protect, authorize('admin', 'user'), deleteReview);
+
 module.exports = router;
