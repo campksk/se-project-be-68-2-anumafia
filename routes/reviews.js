@@ -8,4 +8,7 @@ router.route("/")
 router.route("/:id")
     .get(getReview);
 
+router.route('/:id')
+    .delete(protect, authorize('admin', 'user'), deleteReview);
+
 module.exports = router;
