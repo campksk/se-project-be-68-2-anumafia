@@ -156,9 +156,12 @@ exports.updateReview = async (req, res, next) => {
 			});
 		}
 
-		req.body.reviewText = req.body.reviewText.trim(); //Trim whitespace from review text
+		const updateData = {};
 
-		review = await Review.findByIdAndUpdate(req.params.id, req.body, {
+		updateData.reviewText = req.body.reviewText.trim(); //Trim whitespace from review text
+		updateData.rating = req.body.rating;
+
+		review = await Review.findByIdAndUpdate(req.params.id, updateData, {
 			new: true,
 			runValidators: true
 		});
