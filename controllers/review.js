@@ -96,6 +96,35 @@ exports.getReview = async (req, res, next) => {
     }
 };
 
+// @desc    Get review form all companies for admin
+// @route   GET /api/v1/reviews
+// @access  Private
+exports.getAllReviews = async (req, res, next) => {
+    try {
+        const reviews = await Review.find()
+            .populate({
+                path: 'user',
+                select: 'name'
+            })
+            .populate({
+                path: 'company',
+                select: 'name'
+            });
+
+        res.status(200).json({
+            success: true,
+            count: reviews.length,
+            data: reviews
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Cannot get reviews"
+        });
+    }
+};
+
 // @desc    Delete review
 // @route   DELETE /api/v1/reviews/:id
 // @access  Private
