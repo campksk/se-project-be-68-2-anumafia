@@ -154,6 +154,13 @@ exports.updateCompany = async (req, res, next) => {
             });
         }
 
+        if (company.user.toString() !== req.user.id && req.user.role !== 'admin') {
+            return res.status(401).json({
+                success: false,
+                message: 'User not authorized to update this company'
+            });
+        }
+
         const userId = company.user;
 
         const userUpdateData = {
