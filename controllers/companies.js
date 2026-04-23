@@ -3,6 +3,7 @@ const Interview = require('../models/Interview.js');
 const Review = require('../models/Review.js');
 const { register } = require('./auth.js');
 const User = require('../models/User.js');
+
 // @desc    Get all companies
 // @route   GET /api/v1/companies
 // @access  Public
@@ -145,16 +146,39 @@ exports.createCompany = async (req, res, next) => {
 // @access  Private
 exports.updateCompany = async (req, res, next) => {
     try {
-        const company = await Company.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true
-        });
+        let company = await Company.findById(req.params.id);
 
         if (!company) {
             return res.status(400).json({
                 success: false
             });
         }
+
+        if (company.user.toString() !== req.user.id && req.user.role !== 'admin') {
+            return res.status(401).json({
+                success: false,
+                message: 'User not authorized to update this company'
+            });
+        }
+
+        const userId = company.user;
+
+        const userUpdateData = {
+            name: req.body.name,
+            tel: req.body.tel,
+        };
+        
+        if (Object.keys(userUpdateData).length > 0) {
+            await User.findByIdAndUpdate(userId, userUpdateData, {
+                new: true,
+                runValidators: true
+            });
+        }
+
+        company = await Company.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        });
 
         res.status(200).json({
             success: true,
@@ -222,3 +246,49 @@ exports.deleteCompany = async (req, res, next) => {
         });
     }
 }
+
+// @desc    Update company public status
+// @route   PUT /api/v1/companies/:id/public
+// @access  Private
+exports.updateCompanyPublicStatus = async (req, res, next) => {
+    try {
+        let company = await Company.findById(req.params.id);
+
+        if (!company) {
+            return res.status(400).json({
+                success: false,
+                message: 'Company not found'
+            });
+        }
+
+        if (company.user.toString() !== req.user.id && req.user.role !== 'admin') {
+            return res.status(401).json({
+                success: false,
+                message: 'User not authorized to update this company'
+            });
+        }
+
+        company = await Company.findByIdAndUpdate(req.params.id, { public: req.body.public }, {
+            new: true,
+            runValidators: true
+        });
+
+        res.status(200).json({
+            success: true,
+            data: company
+        });
+    }
+    catch (err) {
+        if (err.name === 'ValidationError') {
+            const message = Object.values(err.errors).map(val => val.message).join(', ');
+            return res.status(400).json({
+                success: false,
+                message: message
+            });
+        }
+
+        res.status(400).json({
+            success: false
+        });
+    }
+};
