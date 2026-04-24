@@ -36,7 +36,7 @@ exports.getInterviewSessions = async (req, res, next) => {
             query = Interview.find({ company: req.params.companyid })
                 .populate({
                     path: 'user',
-                    select: 'name email'
+                    select: 'name email tel'
                 });
         }
         
@@ -48,7 +48,7 @@ exports.getInterviewSessions = async (req, res, next) => {
                 })
                 .populate({
                     path: 'user',
-                    select: 'name email'
+                    select: 'name email tel'
                 });
         }
         else {
