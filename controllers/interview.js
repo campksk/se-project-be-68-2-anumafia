@@ -8,31 +8,39 @@ exports.getInterviewSessions = async (req, res, next) => {
     let query;
 
     //General users can see only their interview sessions!
-    if(req.user.role !== 'admin') {
+    if (req.user.role === 'user') {
         query = Interview.find({ user: req.user.id })
             .populate({
                 path: 'company',
                 select: 'name address website tel description'
             })
-            .populate({
-                path: 'user',
-                select: 'name email'
-            });
     }
     else {
         if (req.params.companyid) {
-            console.log(req.params.companyid);
+            const company = await Company.findById(req.params.companyid);
+
+            if (!company) {
+                return res.status(404).json({
+                    success: false,
+                    message: `No company with the id of ${req.params.companyid}`
+                });
+            }
+
+            if (company.user.toString() !== req.user.id && req.user.role !== 'admin') {
+                return res.status(401).json({
+                    success: false,
+                    message: 'User not authorized to get this company'
+                });
+            }
+
             query = Interview.find({ company: req.params.companyid })
-                .populate({
-                    path: "company",
-                    select: "name address website tel description",
-                })
                 .populate({
                     path: 'user',
                     select: 'name email'
                 });
         }
-        else {
+        
+        else if (req.user.role === 'admin') {
             query = Interview.find()
                 .populate({
                     path: 'company',
@@ -42,6 +50,12 @@ exports.getInterviewSessions = async (req, res, next) => {
                     path: 'user',
                     select: 'name email'
                 });
+        }
+        else {
+            return res.status(401).json({
+                success: false,
+                message: 'Not authorized to access this route'
+            });
         }
     }
 
