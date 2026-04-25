@@ -1,14 +1,14 @@
 {
-  "name": "be-project-68-ihaveksk",
+  "name": "se-project-be-68-2-anumafia",
   "version": "1.0.0",
-  "description": "",
-  "homepage": "https://github.com/2110503-CEDT68/be-project-68-ihaveksk#readme",
+  "description": "[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/5TpXTvuY)",
+  "homepage": "https://github.com/2110503-CEDT68/se-project-be-68-2-anumafia#readme",
   "bugs": {
-    "url": "https://github.com/2110503-CEDT68/be-project-68-ihaveksk/issues"
+    "url": "https://github.com/2110503-CEDT68/se-project-be-68-2-anumafia/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/2110503-CEDT68/be-project-68-ihaveksk.git"
+    "url": "git+https://github.com/2110503-CEDT68/se-project-be-68-2-anumafia.git"
   },
   "license": "ISC",
   "author": "",
@@ -32,7 +32,8 @@
     "hpp": "^0.2.3",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.2.1",
-    "newman": "^6.2.2"
+    "newman": "^6.2.2",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
