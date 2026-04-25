@@ -8,6 +8,8 @@ const { xss } = require('express-xss-sanitizer');
 const rateLimit = require('express-rate-limit');
 const hpp = require('hpp');
 const cors = require('cors');
+const swaggerUI = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 //Load env vars
 dotenv.config({ path: './config/config.env' });
@@ -52,6 +54,8 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.set('query parser', 'extended');
+
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 const auth = require('./routes/auth');
 const companies = require('./routes/companies');
