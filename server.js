@@ -82,7 +82,9 @@ const swaggerDefinition = {
   }
 };
 
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+if (process.env.NODE_ENV !== 'production') {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+}
 
 const auth = require('./routes/auth');
 const companies = require('./routes/companies');
