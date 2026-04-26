@@ -55,7 +55,36 @@ app.use(limiter);
 
 app.set('query parser', 'extended');
 
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+const swaggerDefinition = {
+  openapi: '3.0.0',
+  info: {
+    title: 'Anumafia API',
+    version: '1.0.0',
+  },
+  servers: [
+    {
+      url: 'https://se-project-be-68-2-anumafia.vercel.app/api/v1',
+      description: 'Production server'
+    },
+    {
+      url: 'http://localhost:5000/api/v1',
+      description: 'Development server'
+    }
+  ],
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT'
+      }
+    }
+  }
+};
+
+if (process.env.NODE_ENV !== 'production') {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+}
 
 const auth = require('./routes/auth');
 const companies = require('./routes/companies');

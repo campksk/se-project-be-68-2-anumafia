@@ -33,6 +33,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.2.1",
     "newman": "^6.2.2",
+    "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
