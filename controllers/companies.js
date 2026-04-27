@@ -3,6 +3,7 @@ const Interview = require('../models/Interview.js');
 const Review = require('../models/Review.js');
 const { register } = require('./auth.js');
 const User = require('../models/User.js');
+const { protect } = require('../middleware/auth.js');
 
 // @desc    Get all companies
 // @route   GET /api/v1/companies
@@ -22,6 +23,14 @@ exports.getCompanies = async (req, res, next) => {
 
     let queryStr = JSON.stringify(reqQuery);
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
+
+
+    if (!req.user || req.user.role !== 'admin') {
+        queryStr = JSON.stringify({
+            ...JSON.parse(queryStr),
+            public: true
+        });
+    }
 
     query = Company.find(JSON.parse(queryStr)).populate('interviewSessions');
 
@@ -93,6 +102,13 @@ exports.getCompany = async (req, res, next) => {
         if (!company) {
             return res.status(400).json({
                 success: false,
+            });
+        }
+
+        if (!company.public && (!req.user || req.user.role !== 'admin')) {
+            return res.status(403).json({
+                success: false,
+                message: 'Company is not public'
             });
         }
 
