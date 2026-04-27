@@ -40,7 +40,7 @@ exports.getCompanies = async (req, res, next) => {
         }
     }
 
-    query = Company.find(parsedQuery).populate('interviewSessions');
+    query = Company.find(parsedQuery);
 
     //Select Fields
     if(req.query.select){
