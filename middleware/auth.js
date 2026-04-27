@@ -46,6 +46,45 @@ exports.protect = async (req, res, next) => {
   }
 };
 
+//Optional protect - allows unauthenticated users but sets req.user if token provided
+exports.protectOptional = async (req, res, next) => {
+  let token;
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+
+  // If no token, continue without authentication
+  if (!token || token == "null") {
+    return next();
+  }
+
+  try {
+    //Verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    console.log(decoded);
+
+    req.user = await User.findById(decoded.id);
+    if (req.user.ban?.isBanned) {
+      return res.status(403).json({
+          success: false,
+          message: 'Your account has been banned',
+          reason: req.user.ban.reason
+      });
+    }
+
+    next();
+  } catch (err) {
+    console.log(err.stack);
+    // If token is invalid, continue without authentication
+    next();
+  }
+};
+
 //Grant access to specific roles
 exports.authorize = (...roles) => {
   return (req, res, next) => {
