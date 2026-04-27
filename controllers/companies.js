@@ -96,6 +96,13 @@ exports.getCompany = async (req, res, next) => {
             });
         }
 
+        if (!company.public && req.user.role !== 'admin') {
+            return res.status(403).json({
+                success: false,
+                message: 'Company is not public'
+            });
+        }
+
         res.status(200).json({
             success: true,
             data: company
