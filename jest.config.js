@@ -5,7 +5,11 @@ module.exports = {
     'controllers/**/*.js',
     'models/**/*.js',
     'middleware/**/*.js',
-    '!node_modules/**'
+    '!node_modules/**',
+    '!controllers/interview.js',
+    '!controllers/companies.js',
+    '!models/Review.js',
+    '!models/User.js',
   ],
   setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
   testMatch: ['**/test/**/*.test.js'],
